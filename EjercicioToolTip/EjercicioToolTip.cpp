@@ -8,16 +8,23 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, LPTSTR cmdLine, int cmdSho
 
 void EjercicioToolTip::Window_Open(Win::Event& e)
 {
-	//________________________________________________________ tip1
-	//tip1.AddTool(control, L"Click to show the details");// control: button, textbox, ...
-	tip1.AddTool(tbx1, L"Introduce un número");
-	tip1.SetTitleWithStandardIcon(L"Duplicado", TTI_INFO);
+	::DragAcceptFiles(hWnd, TRUE);
 
 }
 
-void EjercicioToolTip::bt1_Click(Win::Event& e)
+
+
+void EjercicioToolTip::Window_DropFiles(Win::Event& e)
 {
-	const double entrada = tbx1.DoubleValue;
-	tbx1.DoubleValue = entrada*2.0;
+	// Call ::DragAcceptFiles(hWnd, TRUE); during Window_Open
+	UINT fileCount = 0;
+	wchar_t filename[1024];
+	HDROP hdrop = (HDROP)e.wParam;
+	if (::DragQueryFile(hdrop, fileCount, filename, 1024)>3)
+	{
+		filename[1023] = '\0';
+		//OnOpen(filename);
+		this->MessageBox(filename, L"Drop", MB_OK);
+	}
 }
 
